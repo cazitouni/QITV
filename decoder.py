@@ -49,7 +49,8 @@ def itv_parser(xml_data):
     segments = []
     for zb in root.findall("ZB"):
         numero_troncon = get_text_safe(zb, "AAA")
-        # Retourne le numéro en cas de besoin si le sens de controle est opposé au sens de la cana
+        # Retourne le numéro en cas de besoin si le sens de controle est
+        # opposé au sens de la cana
         if get_text_safe(zb, "AAK") == "B" and "-" in numero_troncon:
             parts = numero_troncon.split("-")
             if len(parts) == 2:

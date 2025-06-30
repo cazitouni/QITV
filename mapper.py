@@ -27,17 +27,21 @@ point_depart_lateral = {
 }
 
 point_reference_longitudinal = {
-    "A": "Face intérieure de la paroi du noeud de départ (regard de visite, boîte d’inspection, déversoir, etc.) au point de raccordement",
+    "A": "Face intérieure de la paroi du noeud de départ (regard de visite, boîte "
+    "d’inspection, déversoir, etc.) au point de raccordement",
     "B": "Intrados du tronçon à l'intérieur du noeud de départ",
     "C": "Centre du regard de visite ou de la boîte d’inspection de départ",
-    "D": "Point central des canalisations entrantes et sortantes, mesuré le long de la cunette",
+    "D": "Point central des canalisations entrantes et sortantes, mesuré le long de "
+    "la cunette",
     "Z": "Autre (spécifié à l'aide d'un code de remarque générale ADE)",
 }
 
 methode_inspection = {
-    "A": "Inspection directe du branchement ou du collecteur par un inspecteur se déplaçant dans la canalisation",
+    "A": "Inspection directe du branchement ou du collecteur par un inspecteur "
+    "se déplaçant dans la canalisation",
     "B": "Inspection par une télécaméra circulant dans la canalisation",
-    "C": "Inspection à partir du regard de visite ou de la boîte d’inspection uniquement",
+    "C": "Inspection à partir du regard de visite ou de la boîte d’inspection "
+    "uniquement",
 }
 
 support_media = {
@@ -52,7 +56,8 @@ support_media = {
 
 format_image = {
     "A": "Images fixes",
-    "B": "Hors d'usage — données existantes devant s'énoncer comme si la caractérisation était Z",
+    "B": "Hors d'usage — données existantes devant s'énoncer comme si la "
+    "caractérisation était Z",
     "C": "Windows Meta File — WMF",
     "D": "Graphic Image File — GIF",
     "E": "JPEG",
@@ -100,7 +105,8 @@ forme = {
     "C": "Ovoïde",
     "D": "En U — radier demi-circulaire, dessus plat et pieds droits parallèles",
     "E": "En arc — voûte demi-circulaire, radier plat et pieds droits parallèles",
-    "F": "Ovale — radier et voûte demi-circulaires (de même diamètre) et pieds droits parallèles",
+    "F": "Ovale — radier et voûte demi-circulaires (de même diamètre) et "
+    "pieds droits parallèles",
     "Z": "Autre (avec code de remarque générale ADE)",
 }
 
@@ -231,8 +237,10 @@ caracterisation_1 = {
     },
     "BAB": {
         "A": "micro-fissure — fissure présente uniquement à la surface",
-        "B": "fissure fermée — ligne de fissure visible sur la paroi de la canalisation, les pièces étant toujours en place",
-        "C": "fissure ouverte — fissure débouchant visiblement à la surface de la paroi de canalisation, les pièces étant toujours en place",
+        "B": "fissure fermée — ligne de fissure visible sur la paroi de la "
+        "canalisation, les pièces étant toujours en place",
+        "C": "fissure ouverte — fissure débouchant visiblement à la surface de la "
+        "paroi de canalisation, les pièces étant toujours en place",
     },
     "BAC": {
         "A": "rupture — parties de paroi déplacées mais non manquantes",
@@ -240,9 +248,12 @@ caracterisation_1 = {
         "C": "effondrement — perte totale de l'intégrité structurelle",
     },
     "BAD": {
-        "A": "déplacé — briques ou éléments de maçonnerie toujours présents mais déplacés par rapport à leur position initiale",
+        "A": "déplacé — briques ou éléments de maçonnerie toujours présents "
+        "mais déplacés par rapport à leur position initiale",
         "B": "pièces manquantes — briques ou éléments de maçonnerie manquants",
-        "C": "affaissement de radier — une partie du radier d'une canalisation en briques ou en éléments de maçonnerie est descendue par rapport aux parois, laissant un vide de plus de 20 mm",
+        "C": "affaissement de radier — une partie du radier d'une canalisation en "
+        "briques ou en éléments de maçonnerie est descendue par rapport "
+        "aux parois, laissant un vide de plus de 20 mm",
         "D": "effondrement — perte totale de l'intégrité structurelle",
     },
     "BAF": {
@@ -261,8 +272,11 @@ caracterisation_1 = {
     },
     "BAH": {
         "A": "la position du raccordement sur la canalisation est incorrecte",
-        "B": "il y a un vide entre l’extrémité de la conduite de raccordement et la canalisation principale",
-        "C": "il y a un vide partiel (sur une partie de la circonférence de la conduite de raccordement) entre l’extrémité de la conduite de raccordement et la canalisation principale",
+        "B": "il y a un vide entre l’extrémité de la conduite de raccordement et "
+        "la canalisation principale",
+        "C": "il y a un vide partiel (sur une partie de la circonférence de la "
+        "conduite de raccordement) entre l’extrémité "
+        "de la conduite de raccordement et la canalisation principale",
         "D": "la conduite de raccordement est endommagée",
         "E": "la conduite de raccordement est obstruée",
         "Z": "autre (voir remarques)",
@@ -272,9 +286,12 @@ caracterisation_1 = {
         "Z": "autre (voir remarques)",
     },
     "BAJ": {
-        "A": "déplacement (longitudinal) — les conduites se sont déplacées parallèlement à l'axe du collecteur",
-        "B": "décentrage (radial) — les conduites se sont déplacées perpendiculairement à l'axe du collecteur",
-        "C": "déviation (angulaire) — les axes des canalisations ne sont pas parallèles",
+        "A": "déplacement (longitudinal) — les conduites se sont déplacées "
+        "parallèlement à l'axe du collecteur",
+        "B": "décentrage (radial) — les conduites se sont déplacées "
+        "perpendiculairement à l'axe du collecteur",
+        "C": "déviation (angulaire) — les axes des canalisations ne sont pas "
+        "parallèles",
     },
     "BAK": {
         "A": "le revêtement de la canalisation s’est détaché",
@@ -290,12 +307,14 @@ caracterisation_1 = {
         "K": "défaut de raccordement entre deux revêtements",
         "L": "le matériau de revêtement semble mou",
         "M": "manque de résine dans le stratifié",
-        "N": "défaut d’étanchéité entre l’extrémité du revêtement et la conduite d’accueil ou le regard de visite",
+        "N": "défaut d’étanchéité entre l’extrémité du revêtement et la conduite "
+        "d’accueil ou le regard de visite",
         "Z": "autre (voir remarques)",
     },
     "BAL": {
         "A": "paroi manquante",
-        "B": "une reprise bouchant un trou délibérément pratiqué dans la paroi de la canalisation est devenu défectueuse",
+        "B": "une reprise bouchant un trou délibérément pratiqué dans la paroi "
+        "de la canalisation est devenu défectueuse",
         "C": "Détachement du matériau de réparation de la conduite d'accueil",
         "D": "Matériau de réparation manquant sur la surface de contact",
         "E": "Excès de matériau de réparation constituant un obstacle",
@@ -305,7 +324,8 @@ caracterisation_1 = {
     },
     "BAM": {
         "A": "longitudinale — défaut principalement parallèle à l'axe de la conduite",
-        "B": "circonférentielle — défaut situé principalement sur la circonférence de la conduite",
+        "B": "circonférentielle — défaut situé principalement sur la circonférence "
+        "de la conduite",
         "C": "hélicoïdale",
     },
     "BBA": {
@@ -316,7 +336,8 @@ caracterisation_1 = {
     "BBB": {
         "A": "concrétions",
         "B": "graisse",
-        "C": "encrassement (par exemple, organismes attachés à la paroi de la conduite)",
+        "C": "encrassement (par exemple, organismes attachés à la paroi de la "
+        "conduite)",
         "Z": "autre (voir remarques)",
     },
     "BBC": {
@@ -334,11 +355,13 @@ caracterisation_1 = {
     },
     "BBE": {
         "A": "briquetage ou élément de maçonnerie gisant sur le radier",
-        "B": "fragments de conduite d’évacuation et d’assainissement gisant sur le radier",
+        "B": "fragments de conduite d’évacuation et d’assainissement gisant sur "
+        "le radier",
         "C": "autre objet gisant sur le radier",
         "D": "obstacle dépassant de la paroi",
         "E": "obstacle coincé dans l'assemblage",
-        "F": "obstacle traversant en provenance d’un raccordement ou une conduite de raccordement",
+        "F": "obstacle traversant en provenance d’un raccordement ou une conduite "
+        "de raccordement",
         "G": "conduites externes ou câbles insérés dans la canalisation",
         "H": "obstacle intégré à la structure",
         "Z": "autre (voir remarques)",
@@ -357,10 +380,14 @@ caracterisation_1 = {
     },
     "BCA": {
         "A": "culotte — tuyau avec un raccord préfabriqué",
-        "B": "selle — carottée — raccordement réalisé à l’aide d’une selle ou plaquette — trou net",
-        "C": "selle — burinée — raccordement réalisé à l’aide d’une selle ou plaquette — trou brut",
-        "D": "piquage direct — carotté — raccordement sans pièce intermédiaire — trou net",
-        "E": "piquage direct — buriné — raccordement sans pièce intermédiaire — trou brut",
+        "B": "selle — carottée — raccordement réalisé à l’aide d’une selle ou "
+        "plaquette — trou net",
+        "C": "selle — burinée — raccordement réalisé à l’aide d’une selle ou "
+        "plaquette — trou brut",
+        "D": "piquage direct — carotté — raccordement sans pièce intermédiaire — "
+        "trou net",
+        "E": "piquage direct — buriné — raccordement sans pièce intermédiaire — "
+        "trou brut",
         "F": "raccord autre que culotte (détails manquants)",
         "G": "type de raccord inconnu",
         "Z": "autre (voir remarques)",
@@ -435,14 +462,18 @@ caracterisation_1 = {
 caracterisation_2 = {
     "BAB": {
         "A": "longitudinale — fissure principalement parallèle à l'axe de la conduite",
-        "B": "circonférentielle — fissure principalement située sur la circonférence de la conduite",
-        "C": "complexe — groupe de fissures qui ne peuvent pas être décrites comme étant longitudinales ou circonférentielles",
+        "B": "circonférentielle — fissure principalement située sur la circonférence "
+        "de la conduite",
+        "C": "complexe — groupe de fissures qui ne peuvent pas être décrites comme "
+        "étant longitudinales ou circonférentielles",
         "D": "hélicoïdale",
         "E": "radiale à partir d'un point (fissure en forme d'étoile",
     },
     "BAD": {
-        "A": "autre couche visible de briquetage ou d'élément de maçonnerie — par le trou laissé par le briquetage manquant",
-        "B": "rien de visible — il est impossible de déterminer ce que le briquetage ou l'élément de maçonnerie manquant laisse entrevoir",
+        "A": "autre couche visible de briquetage ou d'élément de maçonnerie — par le "
+        "trou laissé par le briquetage manquant",
+        "B": "rien de visible — il est impossible de déterminer ce que le briquetage "
+        "ou l'élément de maçonnerie manquant laisse entrevoir",
     },
     "BAF": {
         "A": "mécanique",
@@ -454,13 +485,16 @@ caracterisation_2 = {
     },
     "BAI": {
         "A": "visiblement déplacée mais ne dépassant pas dans la canalisation",
-        "B": "pénétrant mais non rompu — point le plus bas au-dessus de la ligne médiane horizontale",
-        "C": "pénétrant mais non rompu — point le plus bas au-dessous de la ligne médiane horizontale",
+        "B": "pénétrant mais non rompu — point le plus bas au-dessus de la ligne "
+        "médiane horizontale",
+        "C": "pénétrant mais non rompu — point le plus bas au-dessous de la ligne "
+        "médiane horizontale",
         "D": "pénétrant et rompu",
     },
     "BAK": {
         "A": "longitudinale",
-        "B": "circonférentielle — essentiellement située sur la circonférence de la conduite",
+        "B": "circonférentielle — essentiellement située sur la circonférence "
+        "de la conduite",
         "C": "complexe",
         "D": "hélicoïdale",
     },
@@ -484,14 +518,19 @@ caracterisation_2 = {
     "BDC": {
         "A": "inspection objective terminée avant d'avoir atteint le noeud d'arrivée",
         "B": "inspection terminée sur les instructions de l'autorité responsable",
-        "C": "lorsque l'on considère, par une inspection partielle précédente, que l'inspection de la conduite totale est terminée",
-        "D": "lorsque l'on considère, par une inspection partielle précédente, que l'inspection de la conduite totale n'est pas terminée",
-        "E": "lorsque l'on considère, par une inspection partielle précédente, que l'on ne sait pas si l'inspection de la conduite totale est terminée",
+        "C": "lorsque l'on considère, par une inspection partielle précédente, que "
+        "l'inspection de la conduite totale est terminée",
+        "D": "lorsque l'on considère, par une inspection partielle précédente, que "
+        "l'inspection de la conduite totale n'est pas terminée",
+        "E": "lorsque l'on considère, par une inspection partielle précédente, que "
+        "l'on ne sait pas si l'inspection de la conduite totale est terminée",
         "Z": "autre (voir remarques)",
     },
     "BDE": {
-        "A": "mal raccordée car les eaux usées se déversent dans un branchement ou un collecteur d’eaux de surface",
-        "B": "mal raccordée car les eaux de surface se déversent dans un branchement ou un collecteur d’eaux usées",
+        "A": "mal raccordée car les eaux usées se déversent dans un branchement ou un "
+        "collecteur d’eaux de surface",
+        "B": "mal raccordée car les eaux de surface se déversent dans un branchement "
+        "ou un collecteur d’eaux usées",
         "C": "aucun mauvais raccordement observé",
     },
 }

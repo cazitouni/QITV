@@ -26,7 +26,9 @@ class XmlReaderDialog(QDialog):
 
         self.setWindowTitle("Import XML NF EN 13508-2")
         self.resize(400, 600)
-
+        QgsProject.instance().layerWasAdded.connect(self.populate_line_layers)
+        QgsProject.instance().layersRemoved.connect(self.populate_line_layers)
+        QgsProject.instance().layerWillBeRemoved.connect(self.populate_line_layers)
         main_layout = QVBoxLayout()
 
         # File browse layout

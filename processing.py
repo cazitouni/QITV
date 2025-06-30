@@ -290,9 +290,12 @@ class ProcessingTask(QgsTask):
         label_settings.fieldName = """
             '<b>' || coalesce("observation", '') || '</b>' ||
             CASE 
-                WHEN coalesce("caracterisation_1", '') != '' OR coalesce("caracterisation_2", '') != '' 
-                THEN '<p><font size="2">' || coalesce("caracterisation_1", '') || '</p>' ||
-                    CASE WHEN coalesce("caracterisation_1", '') != '' AND coalesce("caracterisation_2", '') != '' 
+                WHEN coalesce("caracterisation_1", '') != '' OR 
+                coalesce("caracterisation_2", '') != '' 
+                THEN '<p><font size="2">' || coalesce("caracterisation_1", '') || 
+                '</p>' ||
+                    CASE WHEN coalesce("caracterisation_1", '') != '' 
+                    AND coalesce("caracterisation_2", '') != '' 
                         THEN '<p>' ELSE '' END ||
                     coalesce("caracterisation_2", '') || '</font></p>'
                 ELSE ''
