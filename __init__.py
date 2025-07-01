@@ -1,7 +1,3 @@
-# -----------------------------------------------------------
-# Copyright (C) 2015 Martin Dobias
-# -----------------------------------------------------------
-
 import os
 
 from PyQt5.QtGui import QIcon
@@ -14,10 +10,10 @@ from .resources import *
 
 
 def classFactory(iface):
-    return MinimalPlugin(iface)
+    return QITV(iface)
 
 
-class MinimalPlugin:
+class QITV:
     def __init__(self, iface):
         self.iface = iface
         self.dialog = None
