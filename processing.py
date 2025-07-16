@@ -64,7 +64,7 @@ class ProcessingTask(QgsTask):
                         all_line_fields.add(key)
                 numero_troncon = elem.get("numero_troncon")
                 if numero_troncon and numero_troncon in nr_troncon_geom_map:
-                    observations = elem.get("observation", [])
+                    observations = elem.get("observations", [])
                     valid_obs_count = 0
                     for obs in observations:
                         all_obs_fields.update(obs.keys())
@@ -106,7 +106,7 @@ class ProcessingTask(QgsTask):
                     all_line_fields,
                 )
                 line_features.append(line_feat)
-                observations = elem.get("observation", [])
+                observations = elem.get("observations", [])
                 count_added = 0
                 for obs in observations:
                     point_feat = self._create_point_feature(

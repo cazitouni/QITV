@@ -108,7 +108,10 @@ class XmlReaderDialog(QDialog):
 
     def browse_file(self):
         filename, _ = QFileDialog.getOpenFileName(
-            self, "Ouvrir un fichier XML", "", "Fichier XML (*.xml);;All Files (*)"
+            self,
+            "Ouvrir un fichier XML ou TXT",
+            "",
+            "Fichiers XML ou TXT (*.xml *.txt);;Tous les fichiers (*)",
         )
         if filename:
             self.line_edit.setText(filename)
