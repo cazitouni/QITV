@@ -6,4 +6,4 @@ version=1.0
 qgisMinimumVersion=3.26
 author=Clément Zitouni
 email=cazitouni@metrotopic.net
-repository=https://gitlab.strasbourg.cloud/sgct/plugins/import-itv
+repository=https://github.com/Ville-Eurometropole-Strasbourg/QITV

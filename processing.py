@@ -23,12 +23,23 @@ from qgis.PyQt.QtGui import QColor, QFont
 
 
 class ProcessingTask(QgsTask):
-    def __init__(self, description, filename, content, layer_id, selected_field):
+    def __init__(
+        self,
+        description,
+        filename,
+        content,
+        layer_id,
+        selected_field,
+        branchement_layer_id,
+        branchement_selected_field
+    ):
         super().__init__(description)
         self.filename = filename
         self.content = content
         self.layer_id = layer_id
         self.selected_field = selected_field
+        self.branchement_layer_id = branchement_layer_id
+        self.branchement_selected_field = branchement_selected_field
         self.result_text = ""
         self.error = None
 
@@ -39,6 +50,11 @@ class ProcessingTask(QgsTask):
             if not layer:
                 self.result_text = "La couche sélectionnée est absente"
                 return True
+            branchement_layer = (
+                project.mapLayer(self.branchement_layer_id)
+                if hasattr(self, 'branchement_layer_id')
+                else None
+            )
             idx = layer.fields().indexFromName(self.selected_field)
             if idx == -1:
                 self.result_text = (
@@ -51,8 +67,18 @@ class ProcessingTask(QgsTask):
                 nr_value = feat.attribute(self.selected_field)
                 if nr_value is not None:
                     nr_troncon_geom_map[str(nr_value)] = feat.geometry()
-            if not nr_troncon_geom_map:
-                self.result_text = "Pas de géométries valides dans la couche."
+            nr_branchement_geom_map = {}
+            if branchement_layer:
+                branchement_idx = branchement_layer.fields().indexFromName(
+                    self.branchement_selected_field
+                )
+                if branchement_idx != -1:
+                    for feat in branchement_layer.getFeatures():
+                        nr_value = feat.attribute(self.branchement_selected_field)
+                        if nr_value is not None:
+                            nr_branchement_geom_map[str(nr_value)] = feat.geometry()
+            if not nr_troncon_geom_map and not nr_branchement_geom_map:
+                self.result_text = "Pas de géométries valides dans les couches."
                 return True
             all_line_fields = set()
             all_obs_fields = set()
@@ -63,7 +89,17 @@ class ProcessingTask(QgsTask):
                     if key != "observation":
                         all_line_fields.add(key)
                 numero_troncon = elem.get("numero_troncon")
-                if numero_troncon and numero_troncon in nr_troncon_geom_map:
+                if numero_troncon:
+                    has_point_depart_lateral = "point_depart_lateral" in elem
+                    if (
+                        has_point_depart_lateral
+                        and numero_troncon in nr_branchement_geom_map
+                    ):
+                        geom_map = nr_branchement_geom_map
+                    elif numero_troncon in nr_troncon_geom_map:
+                        geom_map = nr_troncon_geom_map
+                    else:
+                        continue
                     observations = elem.get("observations", [])
                     valid_obs_count = 0
                     for obs in observations:
@@ -73,7 +109,7 @@ class ProcessingTask(QgsTask):
                         if emplacement_long is not None and emplacement_long != "":
                             try:
                                 dist = float(emplacement_long)
-                                geom = nr_troncon_geom_map[numero_troncon]
+                                geom = geom_map[numero_troncon]
                                 if geom.length() >= dist:
                                     valid_obs_count += 1
                             except ValueError:
@@ -89,7 +125,15 @@ class ProcessingTask(QgsTask):
                 if not numero_troncon:
                     results.append(f"Information absente 'numero_troncon': {elem}")
                     continue
-                geom = nr_troncon_geom_map.get(numero_troncon)
+                has_point_depart_lateral = "point_depart_lateral" in elem
+                geom = None
+                if (
+                    has_point_depart_lateral
+                    and numero_troncon in nr_branchement_geom_map
+                ):
+                    geom = nr_branchement_geom_map[numero_troncon]
+                elif numero_troncon in nr_troncon_geom_map:
+                    geom = nr_troncon_geom_map[numero_troncon]
                 if not geom:
                     results.append(
                         f"Pas de géométrie pour le troncon: {numero_troncon}"
@@ -289,13 +333,13 @@ class ProcessingTask(QgsTask):
         label_settings = QgsPalLayerSettings()
         label_settings.fieldName = """
             '<b>' || coalesce("observation", '') || '</b>' ||
-            CASE 
-                WHEN coalesce("caracterisation_1", '') != '' OR 
-                coalesce("caracterisation_2", '') != '' 
-                THEN '<p><font size="2">' || coalesce("caracterisation_1", '') || 
+            CASE
+                WHEN coalesce("caracterisation_1", '') != '' OR
+                coalesce("caracterisation_2", '') != ''
+                THEN '<p><font size="2">' || coalesce("caracterisation_1", '') ||
                 '</p>' ||
-                    CASE WHEN coalesce("caracterisation_1", '') != '' 
-                    AND coalesce("caracterisation_2", '') != '' 
+                    CASE WHEN coalesce("caracterisation_1", '') != ''
+                    AND coalesce("caracterisation_2", '') != ''
                         THEN '<p>' ELSE '' END ||
                     coalesce("caracterisation_2", '') || '</font></p>'
                 ELSE ''

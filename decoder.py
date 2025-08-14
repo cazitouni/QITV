@@ -63,7 +63,6 @@ class ITVParser:
     def detect_format(self, file_path: str) -> str:
         """Detect file format based on extension and content"""
         _, ext = os.path.splitext(file_path.lower())
-
         if ext == ".xml":
             return "xml"
         elif ext == ".txt":
@@ -74,24 +73,20 @@ class ITVParser:
                         return "txt"
             except Exception:
                 pass
-
-        # Fallback: try to detect by content
         try:
             with open(file_path, encoding="ISO-8859-1") as f:
-                content = f.read(1000)  # Read first 1000 chars
+                content = f.read(1000)
                 if content.startswith("<?xml") or "<ZB>" in content:
                     return "xml"
                 elif "#B01=" in content:
                     return "txt"
         except Exception:
             pass
-
         raise ValueError(f"Unable to detect format for file: {file_path}")
 
     def parse_file(self, file_path: str) -> list[dict[str, Any]]:
         """Parse ITV file in either XML or TXT format"""
         format_type = self.detect_format(file_path)
-
         if format_type == "xml":
             return self._parse_xml(file_path)
         elif format_type == "txt":
@@ -120,30 +115,20 @@ class ITVParser:
             mapping = self.VALUE_MAPPINGS[field_key]
             return mapping.get(value, value)
         return value
-
     def _process_segment_data(self, raw_data: dict[str, str]) -> dict[str, Any]:
         """Process and clean segment data with proper type conversion"""
         processed_data = {}
 
         for key, value in raw_data.items():
-            # Convert field key to descriptive name
             field_name = description_champs.get(key, key)
-
-            # Apply value mapping
             processed_value = self._apply_value_mapping(field_name, value)
-
-            # Type conversion for specific fields
             if field_name == "etendue_inspection_prevue" and processed_value:
                 try:
                     processed_value = float(processed_value)
                 except ValueError:
                     processed_value = 0.0
-
             processed_data[field_name] = processed_value
-
-        # Handle numero_troncon reversal logic
-        # Check if sens_ecoulement indicates reverse direction (assuming "B" means reverse)
-
+        """
         if (
             raw_data.get("sens_ecoulement") == "B"
             and "numero_troncon" in processed_data
@@ -152,7 +137,7 @@ class ITVParser:
             parts = processed_data["numero_troncon"].split("-")
             if len(parts) == 2:
                 processed_data["numero_troncon"] = f"{parts[1]}-{parts[0]}"
-
+        """
         return processed_data
 
     def _parse_xml(self, file_path: str) -> list[dict[str, Any]]:
@@ -160,9 +145,7 @@ class ITVParser:
         tree = ET.parse(file_path)
         root = tree.getroot()
         segments = []
-
         for zb in root.findall("ZB"):
-            # Extract raw data
             raw_data = {}
             for field_code, _ in description_champs.items():
                 if field_code in [
@@ -183,11 +166,7 @@ class ITVParser:
                 ]:
                     continue
                 raw_data[field_code] = self._get_text_safe(zb, field_code)
-
-            # Process segment data
             segment_data = self._process_segment_data(raw_data)
-
-            # Parse ZC elements (observations)
             zc_list = []
             for zc in zb.findall("ZC"):
                 zc_data = {
@@ -217,7 +196,6 @@ class ITVParser:
                     "ref_video": self._get_text_safe(zc, "N"),
                 }
                 zc_list.append(zc_data)
-
             segment_data["observations"] = zc_list
             segments.append(segment_data)
         return segments
@@ -247,25 +225,23 @@ class ITVParser:
                 header_keys = line[len("#B01=") :].split(";")
                 header_keys = [h.strip('"') for h in header_keys]
                 temp_data["B01"] = {"header": header_keys, "values": None}
-
             elif line.startswith("#B02="):
                 last_b_key = "B02"
                 header_keys = line[len("#B02=") :].split(";")
                 header_keys = [h.strip('"') for h in header_keys]
                 temp_data["B02"] = {"header": header_keys, "values": None}
-
             elif line.startswith("#B03="):
                 last_b_key = "B03"
                 header_keys = line[len("#B03=") :].split(";")
                 header_keys = [h.strip('"') for h in header_keys]
                 temp_data["B03"] = {"header": header_keys, "values": None}
-
             elif line.startswith("#C="):
                 last_b_key = "C"
                 c_header_keys = line[len("#C=") :].split(";")
                 c_header_keys = [h.strip('"') for h in c_header_keys]
-
             elif line == "#Z":
+                if c_observations and current_block is not None:
+                    current_block["observations"] = c_observations.copy()
                 raw_data = {}
                 for _, content in temp_data.items():
                     keys = content["header"]
@@ -277,16 +253,13 @@ class ITVParser:
                 if raw_data:
                     processed_block = self._process_segment_data(raw_data)
                     current_block.update(processed_block)
-                print(current_block["numero_troncon"])
-                print(current_block["sens_ecoulement"])
+                if current_block:
+                    blocks.append(current_block)
                 temp_data.clear()
                 c_observations.clear()
                 c_header_keys.clear()
                 last_b_key = None
-                if current_block:
-                    blocks.append(current_block)
                 current_block = None
-
             else:
                 if last_b_key == "C" and c_header_keys:
                     values = line.split(";")
@@ -312,7 +285,6 @@ class ITVParser:
                                     caracterisation_1,
                                 )
                             )
-
                         if "caracterisation_2" in observation_data:
                             observation_data["caracterisation_2"] = (
                                 self._resolve_characterisation(
@@ -322,7 +294,6 @@ class ITVParser:
                                 )
                             )
                     c_observations.append(observation_data)
-
                 elif last_b_key and last_b_key in temp_data:
                     values = line.split(";")
                     values = [v.strip('"') for v in values]
