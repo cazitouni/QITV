@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <!-- Background -->
+  <rect width="256" height="256" fill="none"/>
+
+  <!-- Pipe -->
+  <rect x="50" y="80" width="156" height="96" rx="48" ry="48" fill="#4CAF50" stroke="#2E7D32" stroke-width="16"/>
+
+  <!-- Down arrow -->
+  <polygon points="128,200 88,140 168,140" fill="#2E7D32"/>
+  <rect x="120" y="80" width="16" height="60" fill="#2E7D32"/>
+</svg>
