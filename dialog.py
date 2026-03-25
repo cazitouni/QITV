@@ -465,13 +465,13 @@ class ExportDialog(QDialog):
         self._current_task = None
         self._active_tube_dialog = None
         layout = QVBoxLayout()
-        grp_list = QGroupBox("Tubes à exporter")
+        grp_list = QGroupBox("Interventions à exporter")
         list_layout = QVBoxLayout()
         self.list_widget = QListWidget()
         self.list_widget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         list_layout.addWidget(self.list_widget)
         btn_row = QHBoxLayout()
-        self.btn_add = QPushButton("➕  Nouveau tube")
+        self.btn_add = QPushButton("➕  Nouvelle intervention")
         self.btn_edit = QPushButton("✏️  Modifier")
         self.btn_delete = QPushButton("🗑️  Supprimer")
         btn_row.addWidget(self.btn_add)
@@ -483,7 +483,9 @@ class ExportDialog(QDialog):
         out_layout = QHBoxLayout()
         self.path_edit = QLineEdit()
         self.path_edit.setReadOnly(True)
-        self.path_edit.setPlaceholderText("Choisir l'emplacement du fichier .txt …")
+        self.path_edit.setPlaceholderText(
+            "Choisir l'emplacement des fichiers .txt/.xml …"
+        )
         self.btn_browse = QPushButton("Parcourir…")
         out_layout.addWidget(self.path_edit)
         out_layout.addWidget(self.btn_browse)
@@ -540,7 +542,7 @@ class ExportDialog(QDialog):
         row = self.list_widget.currentRow()
         if row < 0:
             QMessageBox.information(
-                self, "Sélection", "Sélectionnez un tube à modifier."
+                self, "Sélection", "Sélectionnez une intervention à modifier."
             )
             return
         if self._active_tube_dialog is not None:
@@ -552,13 +554,13 @@ class ExportDialog(QDialog):
         self._active_tube_dialog = dlg
 
     def _on_tube_validated(self, data, edit_index):
-        """Slot called when tube validated in TubeDialog."""
+        """Slot called when intervention validated in TubeDialog."""
         if edit_index == -1:
             self._tubes.append(data)
-            self._log(f"Tube ajouté : {data['AAA']}")
+            self._log(f"Intervention ajoutée : {data['AAA']}")
         else:
             self._tubes[edit_index] = data
-            self._log(f"Tube modifié : {data['AAA']}")
+            self._log(f"intervention modifiée : {data['AAA']}")
         self._refresh_list()
         if self._active_tube_dialog is not None:
             self._active_tube_dialog.deleteLater()
@@ -568,7 +570,7 @@ class ExportDialog(QDialog):
         row = self.list_widget.currentRow()
         if row < 0:
             QMessageBox.information(
-                self, "Sélection", "Sélectionnez un tube à supprimer."
+                self, "Sélection", "Sélectionnez une intervention à supprimer."
             )
             return
         aaa = self._tubes[row].get("AAA", "")
@@ -576,14 +578,14 @@ class ExportDialog(QDialog):
             QMessageBox.question(
                 self,
                 "Confirmer",
-                f"Supprimer le tube « {aaa} » ?",
+                f"Supprimer l'intervention « {aaa} » ?",
                 QMessageBox.Yes | QMessageBox.No,
             )
             == QMessageBox.Yes
         ):
             self._tubes.pop(row)
             self._refresh_list()
-            self._log(f"Tube supprimé : {aaa}")
+            self._log(f"intervention supprimée : {aaa}")
 
     def _browse_output(self):
         """
@@ -610,7 +612,9 @@ class ExportDialog(QDialog):
         if self._current_task is not None:
             return
         if not self._tubes:
-            QMessageBox.warning(self, "Aucun tube", "Ajoutez au moins un tube.")
+            QMessageBox.warning(
+                self, "Aucune intervention", "Ajoutez au moins une intervention."
+            )
             return
         path = self.path_edit.text().strip()
         if not path:

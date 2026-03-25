@@ -504,7 +504,7 @@ class ExportTask(QgsTask):
             n = len(self.tubes)
             s = "s" if n > 1 else ""
             self.result_text = (
-                f"Export réussi : {n} tube{s} exporté{s} vers\n"
+                f"Export réussi : {n} intervention{s} exportée{s} vers\n"
                 f"  TXT : {self.file_path}\n"
                 f"  XML : {xml_path}"
             )
