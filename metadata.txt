@@ -1,9 +1,10 @@
 [general]
 name=QITV
 description=Qgis plugin pour les inspection telévisée
-about=Un plugin Qgis permettant d'importer des fichier XML au format NF EN 13508-2 issus de Wincan ou autres
+about=Un plugin Qgis permettant d'importer et d'exporter des fichier XML et TXT au format NF EN 13508-2 issus de Wincan ou autres
 version=1.0
 qgisMinimumVersion=3.26
 author=Clément Zitouni
 email=cazitouni@metrotopic.net
 repository=https://github.com/Ville-Eurometropole-Strasbourg/QITV
+icon=icon.svg

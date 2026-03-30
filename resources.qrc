@@ -1,7 +1,8 @@
 <RCC>
-    <qresource prefix="/plugins/QITV" >
+    <qresource prefix="/plugins/QITV">
         <file>import.svg</file>
         <file>export.svg</file>
         <file>picker.svg</file>
+        <file>icon.svg</file>
     </qresource>
 </RCC>
