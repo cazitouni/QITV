@@ -7,5 +7,6 @@ qgisMinimumVersion=3.26
 author=Clément Zitouni
 email=cazitouni@metrotopic.net
 repository=https://github.com/cazitouni/QITV
-tracker=https://github.com/cazitouni/QITV
+tracker=https://github.com/cazitouni/QITV/issues
+homepage=https://github.com/cazitouni/QITV
 icon=icon.svg
