@@ -31,7 +31,7 @@ class ProcessingTask(QgsTask):
         layer_id,
         selected_field,
         branchement_layer_id,
-        branchement_selected_field
+        branchement_selected_field,
     ):
         super().__init__(description)
         self.filename = filename
@@ -52,7 +52,7 @@ class ProcessingTask(QgsTask):
                 return True
             branchement_layer = (
                 project.mapLayer(self.branchement_layer_id)
-                if hasattr(self, 'branchement_layer_id')
+                if hasattr(self, "branchement_layer_id")
                 else None
             )
             idx = layer.fields().indexFromName(self.selected_field)
@@ -184,7 +184,6 @@ class ProcessingTask(QgsTask):
             return True
 
     def _create_observation_layer(self, source_layer, obs_fields):
-        """Create point layer with ALL observation fields"""
         crs_string = "Point?crs=" + source_layer.crs().authid()
         mem_layer = QgsVectorLayer(crs_string, "Observation", "memory")
         fields = QgsFields()
@@ -198,7 +197,6 @@ class ProcessingTask(QgsTask):
         return mem_layer
 
     def _create_line_layer(self, source_layer, line_fields):
-        """Create line layer with ALL line fields"""
         crs_string = "LineString?crs=" + source_layer.crs().authid()
         line_layer = QgsVectorLayer(crs_string, "Inspection", "memory")
         fields = QgsFields()
@@ -219,7 +217,6 @@ class ProcessingTask(QgsTask):
         return line_layer
 
     def _process_line_geometry(self, geom, sens_ecoulement):
-        """Process line geometry based on flow direction"""
         if "amont" not in sens_ecoulement.lower():
             return geom
         if geom.isMultipart():
@@ -231,7 +228,6 @@ class ProcessingTask(QgsTask):
             return QgsGeometry.fromPolylineXY(list(reversed(line)))
 
     def _create_point_feature(self, obs, line_geom, parent_elem, fields, obs_fields):
-        """Create point feature with ALL observation and parent data"""
         emplacement_long = obs.get("emplacement_longitudinal")
         if emplacement_long is None or emplacement_long == "":
             return None
@@ -259,7 +255,6 @@ class ProcessingTask(QgsTask):
         return feat
 
     def _create_line_feature(self, elem, geom, obs_count, fields, line_fields):
-        """Create line feature with ALL line data"""
         feat = QgsFeature()
         feat.setGeometry(geom)
         feat.setFields(fields)
@@ -288,21 +283,12 @@ class ProcessingTask(QgsTask):
         return feat
 
     def _apply_line_styling(self, line_layer):
-        """Apply double line styling"""
         symbol = QgsLineSymbol()
         left_line = QgsSimpleLineSymbolLayer.create(
-            {
-                "color": "blue",
-                "width": "0.5",
-                "offset": "-1.5",
-            }
+            {"color": "blue", "width": "0.5", "offset": "-1.5"}
         )
         right_line = QgsSimpleLineSymbolLayer.create(
-            {
-                "color": "blue",
-                "width": "0.5",
-                "offset": "1.5",
-            }
+            {"color": "blue", "width": "0.5", "offset": "1.5"}
         )
         symbol.deleteSymbolLayer(0)
         symbol.appendSymbolLayer(left_line)
@@ -311,7 +297,6 @@ class ProcessingTask(QgsTask):
         line_layer.triggerRepaint()
 
     def _apply_point_styling(self, mem_layer, unique_observations):
-        """Apply categorized styling based on observation types"""
         categories = []
         special_obs = {"Type du noeud de départ", "Référence du noeud d'arrivée"}
         for obs_val in unique_observations:
@@ -329,7 +314,6 @@ class ProcessingTask(QgsTask):
         mem_layer.triggerRepaint()
 
     def _apply_labeling(self, mem_layer):
-        """Apply HTML labeling with callouts"""
         label_settings = QgsPalLayerSettings()
         label_settings.fieldName = """
             '<b>' || coalesce("observation", '') || '</b>' ||
@@ -368,3 +352,163 @@ class ProcessingTask(QgsTask):
         mem_layer.setLabelsEnabled(True)
         mem_layer.setLabeling(labeling)
         mem_layer.triggerRepaint()
+
+
+_TXT_HEADER = '#A1=ISO-8859-1:1998\n#A2=fr\n#A3=;\n#A4=.\n#A5="\n'
+_B02_HEADER = "ABP"
+_B03_HEADER = "ACA;ADE;ACB;ACC;ACD;ADE;ACG;ACH;ACI;ACK;ADE"
+
+
+def _q(value):
+    """Wrap a string value in double-quotes for the TXT format."""
+    v = str(value).strip() if value else ""
+    return f'"{v}"'
+
+
+def _tube_to_txt(d):
+    """Convert one tube dict to its TXT block string."""
+    has_aav = "AAV" in d
+    b01_header_fields = ["AAA", "AAB", "AAD", "AAF", "AAJ", "AAK", "AAL", "ADE", "AAN"]
+    if has_aav:
+        b01_header_fields.append("AAV")
+    b01_header = ";".join(b01_header_fields)
+    b01_values_list = [
+        _q(d.get("AAA", "")),
+        _q(d.get("AAB", "")),
+        _q(d.get("AAD", d.get("AAB", ""))),
+        _q(d.get("AAF", "")),
+        _q(d.get("AAJ", "")),
+        d.get("AAK", "A"),
+        d.get("AAL", "Z"),
+        '""',
+        _q(d.get("AAN", "")),
+    ]
+    if has_aav:
+        b01_values_list.append('""')  # empty AAV
+    b01_values = ";".join(b01_values_list)
+    b02_value = d.get("ABP", "C")
+    acb = d.get("ACB", "0")
+    acc_raw = d.get("ACC", "")
+    acc = acc_raw if acc_raw and acc_raw != "0" else acb
+    b03_values = ";".join(
+        [
+            d.get("ACA", "Z"),
+            '""',
+            acb,
+            acc,
+            d.get("ACD", "AX"),
+            '""',
+            "",
+            "",
+            "",
+            d.get("ACK", "Z"),
+            '""',
+        ]
+    )
+    return (
+        f"#B01={b01_header}\n"
+        f"{b01_values}\n"
+        f"#B02={_B02_HEADER}\n"
+        f"{b02_value}\n"
+        f"#B03={_B03_HEADER}\n"
+        f"{b03_values}\n"
+        f"#Z\n"
+    )
+
+
+_XML_HEADER = (
+    '<?xml version="1.0" encoding="UTF-8"?>\n'
+    "<DATA>\n"
+    "  <ZA>\n"
+    "    <A1>UTF-8</A1>\n"
+    "    <A2>FRE</A2>\n"
+    "    <A4>.</A4>\n"
+    "  </ZA>\n"
+)
+_XML_FOOTER = "</DATA>\n"
+
+
+def _tube_to_xml(d):
+    """Convert one tube dict to its XML <ZB> block (no observations)."""
+
+    def _tag(name, value):
+        v = str(value).strip() if value else ""
+        return f"    <{name}>{v}</{name}>\n"
+
+    acb = d.get("ACB", "0")
+    acc_raw = d.get("ACC", "")
+    acc = acc_raw if acc_raw and acc_raw != "0" else acb
+    lines = ["  <ZB>\n"]
+    lines.append(_tag("AAA", d.get("AAA", "")))
+    lines.append(_tag("AAB", d.get("AAB", "")))
+    lines.append(_tag("AAD", d.get("AAD", d.get("AAB", ""))))
+    lines.append(_tag("AAF", d.get("AAF", "")))
+    if d.get("AAJ"):
+        lines.append(_tag("AAJ", d.get("AAJ", "")))
+    lines.append(_tag("AAK", d.get("AAK", "A")))
+    lines.append(_tag("AAL", d.get("AAL", "A")))
+    if d.get("AAN"):
+        lines.append(_tag("AAN", d.get("AAN", "")))
+    lines.append(_tag("ABP", d.get("ABP", "C")))
+    lines.append(_tag("ACA", d.get("ACA", "Z")))
+    lines.append(_tag("ACB", acb))
+    lines.append(_tag("ACC", acc))
+    lines.append(_tag("ACD", d.get("ACD", "AX")))
+    lines.append(_tag("ACK", d.get("ACK", "Z")))
+    if "AAV" in d:
+        lines.append(_tag("AAV", ""))
+    lines.append("  </ZB>\n")
+    return "".join(lines)
+
+
+class ExportTask(QgsTask):
+    """
+    QgsTask that writes both the NF EN 13508-2 TXT file and a matching XML
+    file in a background thread, mirroring the pattern of ProcessingTask.
+
+    The XML path is derived automatically from the TXT path by swapping the
+    extension: e.g. /path/export.txt → /path/export.xml
+    """
+
+    def __init__(self, description, tubes, file_path):
+        super().__init__(description)
+        self.tubes = tubes
+        self.file_path = file_path
+        self.result_text = ""
+        self.error = None
+
+    def _xml_path(self):
+        """Derive the .xml sibling path from the .txt path."""
+        base = self.file_path
+        if base.lower().endswith(".txt"):
+            base = base[:-4]
+        return base + ".xml"
+
+    def run(self):
+        try:
+            txt_lines = [_TXT_HEADER]
+            for tube in self.tubes:
+                txt_lines.append(_tube_to_txt(tube))
+
+            with open(
+                self.file_path, "w", encoding="ISO-8859-1", errors="replace"
+            ) as f:
+                f.write("".join(txt_lines))
+            xml_lines = [_XML_HEADER]
+            for tube in self.tubes:
+                xml_lines.append(_tube_to_xml(tube))
+            xml_lines.append(_XML_FOOTER)
+            xml_path = self._xml_path()
+            with open(xml_path, "w", encoding="UTF-8") as f:
+                f.write("".join(xml_lines))
+            n = len(self.tubes)
+            s = "s" if n > 1 else ""
+            self.result_text = (
+                f"Export réussi : {n} intervention{s} exportée{s} vers\n"
+                f"  TXT : {self.file_path}\n"
+                f"  XML : {xml_path}"
+            )
+            return True
+        except Exception as e:
+            self.error = e
+            return True

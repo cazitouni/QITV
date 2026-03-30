@@ -1,10 +1,11 @@
 # Plugin QGIS - Import Inspection Télévisée (NF EN 13508-2)
 
-Ce plugin QGIS permet l'importation de fichiers d'inspection télévisée des réseaux d'assainissement, conformément à la norme **NF EN 13508-2**. Il facilite la visualisation et l'analyse des données d'inspection directement dans QGIS.
+Ce plugin QGIS permet l'import et l'export de fichiers d'inspection télévisée des réseaux d'assainissement, conformément à la norme **NF EN 13508-2**. Il facilite la visualisation et l'analyse des données d'inspection directement dans QGIS.
 
 ## Fonctionnalités
 
-- 📥 **Importation de fichiers d'inspection**
+- 📥 **Import de fichiers d'inspection**
+-    **Export de fichiers d'inspection**
 - 📌 **Conformité à la norme NF EN 13508-2**
 - 🗂️ **Création automatique de couches attributaires à partir des données importées**
 - 🗺️ **Affichage géographique des observations**
@@ -14,10 +15,6 @@ Ce plugin QGIS permet l'importation de fichiers d'inspection télévisée des r�
 - **XML**
 - **TXT**
 
-## Export
-
-🚧 Les fonctionnalités d'**exportation vers les formats normalisés** NF EN 13508-2 sont **en cours de développement**. Elles seront disponibles dans une prochaine version du plugin.
-
 ## Installation
 
 1. Télécharger le zip disponible en release.
@@ -26,11 +23,12 @@ Ce plugin QGIS permet l'importation de fichiers d'inspection télévisée des r�
 
 ## Utilisation
 
-1. Ouvrir QGIS.
-2. Lancer le plugin depuis la barre d’outils`.
-3. Sélectionner le fichier XML ou TXT à importer.
-4. Sélectionner les couches de canalisation et de branchement, ainsi que les identifiant commun entre la couche et le fichier.
-5. Lancer le traitement.
+Il est possible de personaliser les couches contentenant les branchements et les canalisations depuis le menu `Extensions` -> `QITV`
+
+Pour l'import des troncon cliquer sur le boutons `Import`, sélectionner le fichier `xml` ou `txt` et cliquer sur traiter. 
+
+Pour l'export, cliquer sur le bouton `Export` une interface va s'ouvrir. il est ensuite possible dans cette interface d'ajouter des tronçons, le boutton de selection permetant de choisir un troncon défini dans la couche configurée en amont. une fois tous les tronçons selectionés, il faut shoisir ou suvegarder les fichiers et enfin cliquer sur le bouton exporter. Deux fichier vont se créer un fichier `xml` ainsi qu'un fichier `txt`.
+
 
 ## Note concernant les branchements
 
@@ -46,4 +44,4 @@ Ce plugin est distribué sous la licence AGPLv3. Voir le fichier `LICENSE` pour 
 
 ---
 
-🔧 **Statut du développement** : Expérimental pour l'import, export en développement.
+🔧 **Statut du développement** : Expérimental pour l'import et l'export

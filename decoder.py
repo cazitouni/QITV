@@ -1,6 +1,6 @@
+# ruff: noqa
 import os
 import xml.etree.ElementTree as ET
-from typing import Any
 
 from .mapper import (
     caracterisation_1,
@@ -60,7 +60,7 @@ class ITVParser:
     def __init__(self):
         self.segments = []
 
-    def detect_format(self, file_path: str) -> str:
+    def detect_format(self, file_path):
         """Detect file format based on extension and content"""
         _, ext = os.path.splitext(file_path.lower())
         if ext == ".xml":
@@ -84,7 +84,7 @@ class ITVParser:
             pass
         raise ValueError(f"Unable to detect format for file: {file_path}")
 
-    def parse_file(self, file_path: str) -> list[dict[str, Any]]:
+    def parse_file(self, file_path):
         """Parse ITV file in either XML or TXT format"""
         format_type = self.detect_format(file_path)
         if format_type == "xml":
@@ -94,14 +94,12 @@ class ITVParser:
         else:
             raise ValueError(f"Unsupported format: {format_type}")
 
-    def _get_text_safe(self, element, tag: str) -> str:
+    def _get_text_safe(self, element, tag):
         """Safely extract text from XML element"""
         child = element.find(tag)
         return child.text if child is not None and child.text is not None else ""
 
-    def _resolve_characterisation(
-        self, code_principal: str, field_code: str, mapping_dict: dict
-    ) -> str | None:
+    def _resolve_characterisation(self, code_principal, field_code, mapping_dict):
         """Resolve characterisation codes"""
         if code_principal in mapping_dict:
             return mapping_dict[code_principal].get(
@@ -109,16 +107,16 @@ class ITVParser:
             )
         return None
 
-    def _apply_value_mapping(self, field_key: str, value: str) -> str:
+    def _apply_value_mapping(self, field_key, value):
         """Apply value mapping if available"""
         if field_key in self.VALUE_MAPPINGS:
             mapping = self.VALUE_MAPPINGS[field_key]
             return mapping.get(value, value)
         return value
-    def _process_segment_data(self, raw_data: dict[str, str]) -> dict[str, Any]:
+
+    def _process_segment_data(self, raw_data):
         """Process and clean segment data with proper type conversion"""
         processed_data = {}
-
         for key, value in raw_data.items():
             field_name = description_champs.get(key, key)
             processed_value = self._apply_value_mapping(field_name, value)
@@ -128,19 +126,9 @@ class ITVParser:
                 except ValueError:
                     processed_value = 0.0
             processed_data[field_name] = processed_value
-        """
-        if (
-            raw_data.get("sens_ecoulement") == "B"
-            and "numero_troncon" in processed_data
-            and "-" in processed_data["numero_troncon"]
-        ):
-            parts = processed_data["numero_troncon"].split("-")
-            if len(parts) == 2:
-                processed_data["numero_troncon"] = f"{parts[1]}-{parts[0]}"
-        """
         return processed_data
 
-    def _parse_xml(self, file_path: str) -> list[dict[str, Any]]:
+    def _parse_xml(self, file_path):
         """Parse XML format ITV file"""
         tree = ET.parse(file_path)
         root = tree.getroot()
@@ -200,7 +188,7 @@ class ITVParser:
             segments.append(segment_data)
         return segments
 
-    def _parse_txt(self, file_path: str) -> list[dict[str, Any]]:
+    def _parse_txt(self, file_path):
         """Parse TXT format ITV file"""
         with open(file_path, encoding="ISO-8859-1") as f:
             lines = f.readlines()
@@ -248,7 +236,7 @@ class ITVParser:
                     values = content["values"]
                     if values is None:
                         continue
-                    for k, v in zip(keys, values, strict=False):
+                    for k, v in zip(keys, values):
                         raw_data[k] = v
                 if raw_data:
                     processed_block = self._process_segment_data(raw_data)
@@ -265,10 +253,7 @@ class ITVParser:
                     values = line.split(";")
                     values = [v.strip('"') for v in values]
                     observation_data = {}
-
-                    for _, (key, value) in enumerate(
-                        zip(c_header_keys, values, strict=False)
-                    ):
+                    for _, (key, value) in enumerate(zip(c_header_keys, values)):
                         if key in description_champs:
                             field_name = description_champs[key]
                             observation_data[field_name] = value
